@@ -1,0 +1,12 @@
+th,
+td {
+    text-align: center;
+}
+
+.winningPick {
+    background-color: limegreen;
+}
+
+.losingPick {
+    background-color: lightcoral;
+}

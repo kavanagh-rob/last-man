@@ -1,0 +1,19 @@
+<h4 class="gameweek-header">Gameweek {{currentRound.round}}</h4>
+<h3 class="gameweek-header">Deadline : {{deadline}} </h3>
+<table class="table hoverTable gameweek-table">
+    <thead>
+        <tr>
+            <th scope="col">Home</th>
+            <th scope="col"></th>
+            <th scope="col">Away</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let match of currentRound.matches;">
+            <td>{{getTeamName(match.contestants[0])}}</td>
+            <td>VS</td>   
+            <td>{{getTeamName(match.contestants[1])}}</td> 
+
+        </tr>
+    </tbody>
+</table>

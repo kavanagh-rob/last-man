@@ -1,0 +1,16 @@
+<h4>Player Table</h4>
+<table class="table hoverTable">
+    <thead>
+        <tr>
+            <th scope="col">Player</th>
+            <th  scope="col" *ngFor="let weekIndex of eventinfo.weeks;">Week {{weekIndex}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let player of playerList;">
+            <td>{{player.name}}</td>
+            <td *ngFor="let weekIndex of eventinfo.weeks"  [ngClass]="getResultClass(player, weekIndex)">{{getPlayerPick(player, weekIndex)}}</td>   
+            <!-- <td  *ngFor="let pick of player.picks; let i = index">{{getPickForWeek(pick, i)}}</td>    -->
+        </tr>
+    </tbody>
+</table>
