@@ -1,0 +1,17 @@
+<br/>
+<h4  class="text-center">Prizes</h4>
+
+<table class="table hoverTable text-center"> 
+    <thead>
+        <tr>
+            <th scope="col">Position</th>
+            <th scope="col">Prize</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let prize of prizeList;">
+            <td>{{prize.place}}</td>
+            <td>{{prize.reward}}</td>   
+        </tr>
+    </tbody>
+</table>
