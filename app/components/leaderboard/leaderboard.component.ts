@@ -44,7 +44,9 @@ export class LeaderboardComponent implements OnInit {
   }
 
   getTeamResult(team, weekIndex): any {
-    return (this.eventinfo.results[weekIndex].filter(result => result.toLowerCase() === team.toLowerCase()).length === 1);
+    if (team){
+      return (this.eventinfo.results[weekIndex].filter(result => result.toLowerCase() === team.toLowerCase()).length === 1);
+    }
   }
 
 }
