@@ -1,8 +1,13 @@
 <br/>
 <h4 class="text-center">Player Table</h4>
+<h5 class="text-center">Total players {{playerList.length}} <span [style.color]="'limegreen'">(Remaining {{remainingPlayers.length}})</span></h5>
 <div class="form-group">
     <input type="text" class="form-control" placeholder="Search Name" [(ngModel)]="term">
 </div>
+<ngx-spinner [fullScreen]="false" type="ball-clip-rotate-multiple">
+        <h3 style="color: white"> Loading Players... </h3>
+</ngx-spinner>
+
 <table class="table hoverTable">
     <thead>
         <tr>
@@ -11,9 +16,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let player of playerList | filter:term;">
-            <td>{{player.name}}</td>
-            <td *ngFor="let weekIndex of eventinfo.weeks"  [ngClass]="getResultClass(player, weekIndex)"><img [src]="getTeamLogo(player, weekIndex)"> {{getPlayerPick(player, weekIndex)}}</td>   
+        <tr *ngFor="let player of sortPlayerByName(playerList) | filter:term;">
+            <td class="name"><strong>{{player.name}}</strong></td>
+            <td *ngFor="let weekIndex of eventinfo.weeks"  [ngClass]="getResultClass(player, weekIndex)"><img [src]="getTeamLogo(player, weekIndex)"><div>{{getPlayerPick(player, weekIndex)}}</div></td>   
         </tr>
     </tbody>
 </table>

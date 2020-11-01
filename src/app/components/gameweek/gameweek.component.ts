@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from '../../shared/services/data.service';
 import {ResourceService} from '../../shared/services/resource.service';
+import {ActivatedRoute} from '@angular/router';
+import { NgxSpinnerService  } from 'ngx-spinner';
 
 @Component({
   selector: 'app-gameweek',
@@ -9,37 +11,57 @@ import {ResourceService} from '../../shared/services/resource.service';
 })
 export class GameweekComponent implements OnInit {
 
-  constructor(private dataService: DataService, private resourceService: ResourceService) { }
+  constructor(private spinner: NgxSpinnerService, private route: ActivatedRoute,
+              private resourceService: ResourceService, private dataService: DataService) {
+    this.eventObservable = this.route.snapshot.data['resolvedEventInfo'];
+    this.gameweekObservable = this.route.snapshot.data['resolvedGameweek'];
+
+  }
   currentRound = {matches: [], round: ''};
+  eventinfo = {nextDeadline: '', currentWeek: ''};
+  gameweekObservable;
+  eventObservable;
   teams;
   deadline;
   retryCount = 0;
 
   ngOnInit(): void {
-    this.loadGameweekData();
+    this.spinner.show();
+    this.eventObservable.subscribe( resp => {
+      this.eventinfo = resp.data;
+      this.loadGameweekData();
+    });
   }
 
-  loadGameweekData(): void{
-    this.dataService.getGameweekData().then(resp => {
-      console.log(resp);
-      if (resp) {
-        this.currentRound = resp['currentRound'];
-        this.teams = resp['game']['contestants'];
-        try{
-          this.deadline = this.getDateTime(resp['currentRound']['submissionDeadline']);
-        }catch (e){
-          console.log(e);
-        }
+  loadGameweekData(): void {
+    this.gameweekObservable.subscribe( resp => {
+      if (!resp || !resp.game){
+        this.retryFetchGameweek();
+      }else{
+       this.setGameweekVariables(resp);
       }
-      else{
-        if (this.retryCount < 2){
-          console.log('Retry fetch data:' + this.retryCount);
-          this.retryCount ++;
-          this.loadGameweekData();
-        }
-      }
-     });
+    });
   }
+
+  setGameweekVariables(resp): any {
+    this.spinner.hide();
+    this.currentRound = resp['game']['rounds'][parseInt(this.eventinfo.currentWeek, 0) - 1];
+    this.teams = resp['game']['contestants'];
+    try{
+      this.deadline = this.getDateTime(this.currentRound['submissionDeadline']);
+    }catch (e){
+      console.log(e);
+    }
+  }
+
+  retryFetchGameweek(): any{
+    console.log('Retrying Fetch Gameweek');
+    this.dataService.getGameweekData().subscribe( resp => {
+      this.spinner.hide();
+      this.setGameweekVariables(resp);
+    });
+  }
+
   getTeamName(teamRef): string{
     const team = this.teams.filter(item => item.contestantReference === teamRef)[0];
     if (team){

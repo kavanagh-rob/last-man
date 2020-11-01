@@ -15,6 +15,7 @@ export class LeaderboardComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.getPlayers().then(resp => {
       this.playerList = resp.Items;
+      console.log(this.playerList);
      });
     this.dataService.getEventinfo().then(resp => {
       this.eventinfo = resp;
@@ -47,6 +48,19 @@ export class LeaderboardComponent implements OnInit {
     if (team){
       return (this.eventinfo.results[weekIndex].filter(result => result.toLowerCase() === team.toLowerCase()).length === 1);
     }
+  }
+
+  sortPlayerByWeek(prop: string): any{
+    if (! this.playerList){
+      return;
+    }
+    const raceNumberProp = 'raceNumber';
+    const horseNumberProp = 'horseNumber';
+    const sortByHorse = this.playerList.sort((a, b) =>
+      a[horseNumberProp] > b[horseNumberProp] ? 1 : a[horseNumberProp] === b[horseNumberProp] ? 0 : -1);
+
+    return  sortByHorse.sort((a, b) =>
+      b[raceNumberProp] - a[raceNumberProp]);
   }
 
 }

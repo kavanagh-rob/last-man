@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../../environments/environment';
+import { map, publishReplay, refCount } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ import {environment} from '../../../environments/environment';
 export class DataService {
 
   constructor(private http: HttpClient) {}
+
+  gameweekData: Observable<object>;
 
   extractBody(res: any): any {
     const body = res.data;
@@ -23,11 +26,42 @@ export class DataService {
     console.error(error.message || error);
   }
 
-  getGameweekData(): any {
-    return this.http.get(`${environment.liveUrl}/gameweek`)
-      .toPromise()
-      .then(this.extractBody)
-      .catch(this.handleErrorPromise);
+  async getGameweekDataAsync(): Promise<any> {
+    // Cache it once if configs value is false
+    let gameweekObserv;
+    gameweekObserv = this.http.get(`${environment.liveUrl}/gameweek`).pipe(
+      map(data => {
+        if (data && data['body']) {
+          return JSON.parse(data['body']);
+        } else {
+          console.log('error found');
+          return null;
+        }
+      }),
+      publishReplay(1), // this tells Rx to cache the latest emitted
+      refCount()
+    );
+    return gameweekObserv;
+  }
+
+  getGameweekData(): Observable<object> {
+    // Cache it once if configs value is false
+    return this.http.get(`${environment.liveUrl}/gameweek`).pipe(
+      map(data => {
+        if (data && data['body']) {
+          return JSON.parse(data['body']);
+        } else {
+          console.log('error found');
+          return null;
+        }
+      }),
+      publishReplay(1), // this tells Rx to cache the latest emitted
+      refCount() // and this tells Rx to keep the Observable alive as long as there are any Subscribers
+      );
+  }
+
+ async getEventInfoAsync(): Promise<any> {
+    return this.http.get(`${environment.liveUrl}/eventinfo`);
   }
 
   getEventinfo(): any {
@@ -44,6 +78,13 @@ export class DataService {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleErrorPromise);
+  }
+
+  postUserForm(userInfo): any {
+    return this.http.post(`${environment.liveUrl}/userinfo`, userInfo)
+    .toPromise()
+    .then(this.extractData)
+    .catch(this.handleErrorPromise);
   }
 
 }

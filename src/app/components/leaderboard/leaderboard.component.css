@@ -1,3 +1,9 @@
+:host {         
+    display: block;
+    width: 100%;      
+}
+
+
 th,
 td {
     text-align: center;
@@ -9,4 +15,36 @@ td {
 
 .losingPick {
     background-color: lightcoral;
+}
+
+.name{
+    font-size: 1.3em;
+}
+
+@media screen and (max-width: 767px) {
+    img {
+        height: 14px;
+    }
+
+    td{
+        font-size: 0.45em;
+    }
+
+    th{
+        font-size:0.45em;
+    }
+
+    .name{
+        font-size: 0.5em;
+    }
+
+    table {
+        max-width: 100%;
+        table-layout:fixed;
+    }
+
+    .heading {
+        font-size: 0.75em;
+    }
+
 }

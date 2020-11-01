@@ -54,7 +54,7 @@ export class ResourceService {
       fulham: 'FUL',
       newcastle: 'NEW',
       leeds: 'LEE',
-      'west brom': 'EBA',
+      'west brom': 'WBA',
       leicester: 'LEI',
       tottenham: 'TOT',
       'crystal palace': 'CRY',

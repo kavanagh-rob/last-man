@@ -10,27 +10,53 @@ import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { GameweekComponent } from './components/gameweek/gameweek.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminComponent } from './components/admin/admin.component';
-import { PrizesComponent } from './components/prizes/prizes.component';
+import { ContactComponent } from './components/contact/contact.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FormsModule } from '@angular/forms';
+import { InfoComponent } from './components/info/info.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { DataResolver } from './shared/resolvers/data-resolver';
+import { EventResolver } from './shared/resolvers/event-resolver';
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 
 const appRoutes: Routes = [
   {
-    path: 'home',
-    component: HomeComponent
+    path: '',
+    resolve: {
+      resolvedGameweek: DataResolver,
+      resolvedEventInfo: EventResolver
+    },
+    children: [
+      { path: '',
+        redirectTo: '/info',
+        pathMatch: 'full'
+      },
+      {
+        path: 'info',
+        component: InfoComponent
+      },
+      {
+        path: 'players',
+        component: LeaderboardComponent
+      },
+      {
+        path: 'gameweek',
+        component: GameweekComponent
+      },
+      {
+        path: 'contact',
+        component: ContactComponent
+      },
+    ]
   },
   { path: '',
-    redirectTo: '/home',
+    redirectTo: '/info',
     pathMatch: 'full'
   },
-  {
-    path: 'admin',
-    component: AdminComponent
-  },
   { path: 'pageNotFound', component: PageNotFoundComponent },
-  { path: '**', redirectTo: '/pageNotFound'},
+  { path: '**', redirectTo: 'info'},
 
 ];
 
@@ -42,7 +68,8 @@ const appRoutes: Routes = [
     GameweekComponent,
     LeaderboardComponent,
     AdminComponent,
-    PrizesComponent
+    ContactComponent,
+    InfoComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -55,12 +82,13 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     MatTabsModule,
+    MatToolbarModule,
     MatCardModule,
-    FontAwesomeModule,
     Ng2SearchPipeModule,
-    FormsModule
+    FormsModule,
+    NgxSpinnerModule
   ],
-  providers: [],
+  providers: [DataResolver, EventResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
