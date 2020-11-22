@@ -2,3 +2,10 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+  /* Responsive Styles */
+  @media screen and (max-width: 767px) {
+    .mat-tab-label{
+        font-size: .65em;
+    }
+  }

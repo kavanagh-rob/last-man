@@ -55,8 +55,6 @@ export class DataService {
           return null;
         }
       }),
-      publishReplay(1), // this tells Rx to cache the latest emitted
-      refCount() // and this tells Rx to keep the Observable alive as long as there are any Subscribers
       );
   }
 
