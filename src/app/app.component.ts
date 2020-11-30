@@ -22,12 +22,12 @@ export class AppComponent implements OnInit{
             link: './players',
             index: 1
         }, {
-            label: 'gameweek',
-            link: './gameweek',
+            label: 'stats',
+            link: './stats',
             index: 2
         }, {
-          label: 'contact',
-          link: './contact',
+          label: 'gameweek',
+          link: './gameweek',
           index: 3
       }
     ];

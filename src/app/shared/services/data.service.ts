@@ -22,6 +22,11 @@ export class DataService {
     const body = res.data;
     return res.data || {};
   }
+
+  extractLambdaData(res: any): any {
+    return res || {};
+  }
+
   handleErrorPromise(error: Response | any): void {
     console.error(error.message || error);
   }
@@ -55,10 +60,16 @@ export class DataService {
           return null;
         }
       }),
-      publishReplay(1), // this tells Rx to cache the latest emitted
-      refCount() // and this tells Rx to keep the Observable alive as long as there are any Subscribers
       );
   }
+
+  getLiveScoresData(): any {
+    return this.http.get(`${environment.liveUrl}/livescores`)
+      .toPromise()
+      .then(this.extractLambdaData)
+      .catch(this.handleErrorPromise);
+  }
+
 
  async getEventInfoAsync(): Promise<any> {
     return this.http.get(`${environment.liveUrl}/eventinfo`);

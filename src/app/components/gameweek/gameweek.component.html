@@ -2,11 +2,12 @@
 <div>
     <div >
         <ngx-spinner [fullScreen]="false" type="ball-clip-rotate-multiple">
-                <h3 style="color: white"> Loading Matches... </h3>
+            <h5 style="color: white"> Loading Matches... </h5>
         </ngx-spinner>
     </div>
 
-    <h4 class="heading text-center">Gameweek {{currentRound.round}}</h4>
+    <app-livescores></app-livescores>
+    <h4 class="heading text-center"><strong>Round {{getCurrentRound()}}</strong> (Gameweek {{currentRound.round}})</h4>
     <!-- <h3 class="heading text-center">Deadline : {{deadline}} </h3> -->
     <h3 class="heading text-center">Deadline : {{eventinfo.nextDeadline}} </h3>
     <table class="table hoverTable gameweek-table">
@@ -34,3 +35,11 @@
         </tbody>
     </table>
 </div>
+
+<div class="formContainer">
+    <h3 class="text-center heading" style="color: indigo"> Form Guide </h3>
+    <img class="form-image" src="https://last-man-input.s3-eu-west-1.amazonaws.com/img/form_small.png" 
+        srcset="https://last-man-input.s3-eu-west-1.amazonaws.com/img/form_small.png 1000w, https://last-man-input.s3-eu-west-1.amazonaws.com/img/form_large.png 2000w" alt="yah">
+ </div>
+    
+    

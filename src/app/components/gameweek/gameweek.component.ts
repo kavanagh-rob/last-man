@@ -18,7 +18,7 @@ export class GameweekComponent implements OnInit {
 
   }
   currentRound = {matches: [], round: ''};
-  eventinfo = {nextDeadline: '', currentWeek: ''};
+  eventinfo = {nextDeadline: '', currentWeek: '', startWeek: ''};
   gameweekObservable;
   eventObservable;
   teams;
@@ -45,9 +45,9 @@ export class GameweekComponent implements OnInit {
 
   setGameweekVariables(resp): any {
     this.spinner.hide();
-    this.currentRound = resp['game']['rounds'][parseInt(this.eventinfo.currentWeek, 0) - 1];
-    this.teams = resp['game']['contestants'];
     try{
+      this.currentRound = resp['game']['rounds'][parseInt(this.eventinfo.currentWeek, 0) - 1];
+      this.teams = resp['game']['contestants'];
       this.deadline = this.getDateTime(this.currentRound['submissionDeadline']);
     }catch (e){
       console.log(e);
@@ -68,6 +68,10 @@ export class GameweekComponent implements OnInit {
       return team.name;
     }
     return '';
+  }
+
+  getCurrentRound(): any{
+    return parseInt(this.eventinfo.currentWeek, 0) - parseInt(this.eventinfo.startWeek, 0) + 1;
   }
 
   getTeamLogo(team): any {

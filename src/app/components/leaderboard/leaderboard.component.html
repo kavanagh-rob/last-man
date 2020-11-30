@@ -1,24 +1,28 @@
 <br/>
 <h4 class="text-center">Player Table</h4>
-<h5 class="text-center">Total players {{playerList.length}} <span [style.color]="'limegreen'">(Remaining {{remainingPlayers.length}})</span></h5>
+<h5 class="text-center">Total players {{playerList.length}} <span class="remainingPlayersText">(Remaining {{remainingPlayers.length}})</span></h5>
 <div class="form-group">
     <input type="text" class="form-control" placeholder="Search Name" [(ngModel)]="term">
 </div>
 <ngx-spinner [fullScreen]="false" type="ball-clip-rotate-multiple">
-        <h3 style="color: white"> Loading Players... </h3>
+    <h5 style="color: white"> Loading Players... </h5>
 </ngx-spinner>
 
-<table class="table hoverTable">
-    <thead>
-        <tr>
-            <th scope="col">Player</th>
-            <th  scope="col" *ngFor="let weekIndex of eventinfo.weeks;">Week {{weekIndex}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let player of sortPlayerByName(playerList) | filter:term;">
-            <td class="name"><strong>{{player.name}}</strong></td>
-            <td *ngFor="let weekIndex of eventinfo.weeks"  [ngClass]="getResultClass(player, weekIndex)"><img [src]="getTeamLogo(player, weekIndex)"><div>{{getPlayerPick(player, weekIndex)}}</div></td>   
-        </tr>
-    </tbody>
-</table>
+<div id="wrapper">
+<div id="table-content"> 
+    <table class="table hoverTable">
+        <thead>
+            <tr>
+                <th class="player-heading" scope="col">Player</th>
+                <th class="round-heading" scope="col" *ngFor="let weekIndex of eventinfo.weeks;let i = index">Round {{i+1}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr [style.background-color]="getActiveColor(player)" *ngFor="let player of sortPlayerByName(playerList) | filter:term;">
+                <td [style.background-color]="getActiveColor(player)" class="player-label"><strong>{{player.name}}</strong></td>
+                <td  *ngFor="let weekIndex of eventinfo.weeks"  [ngClass]="getResultClass(player, weekIndex)"><img [src]="getTeamLogo(player, weekIndex)"><div>{{getPlayerPick(player, weekIndex)}}</div></td>   
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>

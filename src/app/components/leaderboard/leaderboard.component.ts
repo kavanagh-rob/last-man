@@ -11,8 +11,8 @@ import { NgxSpinnerService  } from 'ngx-spinner';
 export class LeaderboardComponent implements OnInit {
 
   constructor(private spinner: NgxSpinnerService, private dataService: DataService, private resourceService: ResourceService) { }
-  eventinfo = {weeks: [], startWeek: null, results: []};
-  playerList = [{name: '', 'exit-week': ''}];
+  eventinfo = {weeks: [], startWeek: null, currentWeek: '', results: {}};
+  playerList = [];
   term: string;
   remainingPlayers = [];
 
@@ -36,7 +36,7 @@ export class LeaderboardComponent implements OnInit {
   getResultClass(playerInfo, weekIndex): any {
     const team = this.getPlayerPick(playerInfo, weekIndex);
     if (this.eventinfo.results[weekIndex] && playerInfo['week' + weekIndex]){
-      return this.getTeamResult(team, weekIndex) ? 'winningPick' : 'losingPick';
+      return this.getTeamResult(team, weekIndex) ? 'winningPick' : '';
     }
   }
 
@@ -63,7 +63,7 @@ export class LeaderboardComponent implements OnInit {
       a['name'] > b['name'] ? 1 : a['name'] === b['name'] ? 0 : -1);
 
     return sortByName.sort((a, b) =>
-    this.getExitWeek(a['exit-week']) >  this.getExitWeek(b['exit-week']) ? 1 :  this.getExitWeek(a['exit-week']) ===  this.getExitWeek(b['exit-week']) ? 0 : -1);
+    this.getExitWeek(b['exit-week']) >  this.getExitWeek(a['exit-week']) ? 1 :  this.getExitWeek(a['exit-week']) ===  this.getExitWeek(b['exit-week']) ? 0 : -1);
   }
 
   getExitWeek(exitWeek): number{
@@ -72,6 +72,10 @@ export class LeaderboardComponent implements OnInit {
    }else{
      return parseInt(exitWeek, 0);
    }
+  }
+
+  getActiveColor(player): string{
+    return player['exit-week'] ? 'crimson' : '';
   }
 
 }

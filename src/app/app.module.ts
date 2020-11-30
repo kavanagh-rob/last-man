@@ -19,6 +19,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { DataResolver } from './shared/resolvers/data-resolver';
 import { EventResolver } from './shared/resolvers/event-resolver';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { StatsComponent } from './components/stats/stats.component';
+import { FormComponent } from './components/form/form.component';
+import { LivescoresComponent } from './components/livescores/livescores.component';
 
 
 const appRoutes: Routes = [
@@ -30,7 +33,7 @@ const appRoutes: Routes = [
     },
     children: [
       { path: '',
-        redirectTo: '/info',
+        redirectTo: '/players',
         pathMatch: 'full'
       },
       {
@@ -46,17 +49,21 @@ const appRoutes: Routes = [
         component: GameweekComponent
       },
       {
+        path: 'stats',
+        component: StatsComponent
+      },
+      {
         path: 'contact',
         component: ContactComponent
       },
     ]
   },
   { path: '',
-    redirectTo: '/info',
+    redirectTo: '/players',
     pathMatch: 'full'
   },
   { path: 'pageNotFound', component: PageNotFoundComponent },
-  { path: '**', redirectTo: 'info'},
+  { path: '**', redirectTo: 'players'},
 
 ];
 
@@ -69,7 +76,10 @@ const appRoutes: Routes = [
     LeaderboardComponent,
     AdminComponent,
     ContactComponent,
-    InfoComponent
+    InfoComponent,
+    StatsComponent,
+    FormComponent,
+    LivescoresComponent
   ],
   imports: [
     RouterModule.forRoot(
