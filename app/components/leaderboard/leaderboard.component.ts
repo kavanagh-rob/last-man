@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from '../../shared/services/data.service';
+import {ResourceService} from '../../shared/services/resource.service';
+import { NgxSpinnerService  } from 'ngx-spinner';
 
 @Component({
   selector: 'app-leaderboard',
@@ -8,39 +10,34 @@ import {DataService} from '../../shared/services/data.service';
 })
 export class LeaderboardComponent implements OnInit {
 
-  constructor(private dataService: DataService) { }
-  eventinfo = {weeks: [], startWeek: null, results: []};
-  playerList = [{name: '', week1Pick: '', week2Pick: '', week3Pick: ''}];
+  constructor(private spinner: NgxSpinnerService, private dataService: DataService, private resourceService: ResourceService) { }
+  eventinfo = {weeks: [], startWeek: null, isWeekComplete: false, currentWeek: '', results: {}};
+  playerList = [];
+  term: string;
+  remainingPlayers = [];
 
   ngOnInit(): void {
+    this.spinner.show();
     this.dataService.getPlayers().then(resp => {
+      this.spinner.hide();
       this.playerList = resp.Items;
-      console.log(this.playerList);
+      this.getRemainingPlayers();
      });
     this.dataService.getEventinfo().then(resp => {
       this.eventinfo = resp;
     });
   }
 
-  getPickForWeek(pick, index): any{
-    if (index + Number.parseInt(this.eventinfo.startWeek, 0) === Number.parseInt(pick.gameweek, 0)) {
-      return pick.team;
-    }
-  }
-
   getPlayerPick(playerInfo, weekIndex): any {
-    if (playerInfo.picks){
-      const selection = playerInfo.picks.filter(pick => Number.parseInt(pick.gameweek, 0) === weekIndex);
-      if (selection.length === 1) {
-        return selection[0].team;
-      }
-    }
+    const weekPick = playerInfo['week' + weekIndex];
+    return weekPick ? weekPick : null;
   }
 
   getResultClass(playerInfo, weekIndex): any {
     const team = this.getPlayerPick(playerInfo, weekIndex);
-    if (this.eventinfo.results[weekIndex]){
-      return this.getTeamResult(team, weekIndex) ? 'winningPick' : 'losingPick';
+    if (this.eventinfo.results[weekIndex] && playerInfo['week' + weekIndex]){
+      return this.getTeamResult(team, weekIndex) ? 'winningPick' :
+      this.isWeekComplete(weekIndex) ?  'losingPick' : '';
     }
   }
 
@@ -50,17 +47,50 @@ export class LeaderboardComponent implements OnInit {
     }
   }
 
-  sortPlayerByWeek(prop: string): any{
+  getTeamLogo(playerInfo, weekIndex): any{
+    return this.resourceService.getTeamLogoFromName(this.getPlayerPick(playerInfo, weekIndex));
+  }
+
+  getRemainingPlayers(): any{
+    this.remainingPlayers = this.playerList.filter(
+      player => !player['exit-week'] || player['exit-week'] === '-');
+  }
+
+  sortPlayerByName(prop: any): any{
     if (! this.playerList){
       return;
     }
-    const raceNumberProp = 'raceNumber';
-    const horseNumberProp = 'horseNumber';
-    const sortByHorse = this.playerList.sort((a, b) =>
-      a[horseNumberProp] > b[horseNumberProp] ? 1 : a[horseNumberProp] === b[horseNumberProp] ? 0 : -1);
+    const sortByName = this.playerList.sort((a, b) =>
+      a['name'] > b['name'] ? 1 : a['name'] === b['name'] ? 0 : -1);
 
-    return  sortByHorse.sort((a, b) =>
-      b[raceNumberProp] - a[raceNumberProp]);
+    return sortByName.sort((a, b) =>
+    this.getExitWeek(b['exit-week']) >  this.getExitWeek(a['exit-week']) ? 1 :  this.getExitWeek(a['exit-week']) ===  this.getExitWeek(b['exit-week']) ? 0 : -1);
+  }
+
+  isWeekComplete(weekIndex): boolean{
+    let isComplete;
+    if (parseInt(weekIndex, 0) <  parseInt(this.eventinfo.currentWeek, 0)) {
+      isComplete = true;
+    }
+    else if (parseInt(weekIndex, 0) === parseInt(this.eventinfo.currentWeek, 0)) {
+      isComplete = this.eventinfo.isWeekComplete;
+    }
+    else{
+      isComplete = false;
+    }
+    return isComplete;
+  }
+
+  getExitWeek(exitWeek): number{
+   if (!exitWeek || exitWeek === '-'){
+    return 100;
+   }else{
+     return parseInt(exitWeek, 0);
+   }
+  }
+
+  getActiveColor(player): string{
+    return player['exit-week'] ? 'crimson' : '';
   }
 
 }
