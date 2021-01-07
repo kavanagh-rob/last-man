@@ -71,7 +71,8 @@ export class GameweekComponent implements OnInit {
   }
 
   getCurrentRound(): any{
-    return parseInt(this.eventinfo.currentWeek, 0) - parseInt(this.eventinfo.startWeek, 0) + 1;
+    // -1 when catch up weeks caused misalignment
+    return parseInt(this.eventinfo.currentWeek, 0) - parseInt(this.eventinfo.startWeek, 0) + 1 - 1;
   }
 
   getTeamLogo(team): any {

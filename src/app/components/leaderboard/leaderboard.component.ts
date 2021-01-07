@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import {DataService} from '../../shared/services/data.service';
 import {ResourceService} from '../../shared/services/resource.service';
 import { NgxSpinnerService  } from 'ngx-spinner';
@@ -8,13 +8,15 @@ import { NgxSpinnerService  } from 'ngx-spinner';
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.css']
 })
-export class LeaderboardComponent implements OnInit {
+export class LeaderboardComponent implements OnInit, AfterViewChecked {
+  @ViewChild('tableScroll') tableScroll: ElementRef;
 
   constructor(private spinner: NgxSpinnerService, private dataService: DataService, private resourceService: ResourceService) { }
-  eventinfo = {weeks: [], startWeek: null, currentWeek: '', results: {}};
+  eventinfo = {weeks: [], startWeek: null, currentWeek: '', results: {}, drawTeams: {} };
   playerList = [];
   term: string;
   remainingPlayers = [];
+  havechecked = false;
 
   ngOnInit(): void {
     this.spinner.show();
@@ -22,10 +24,24 @@ export class LeaderboardComponent implements OnInit {
       this.spinner.hide();
       this.playerList = resp.Items;
       this.getRemainingPlayers();
+      this.checkPlayerSelections();
      });
     this.dataService.getEventinfo().then(resp => {
       this.eventinfo = resp;
     });
+  }
+
+  ngAfterViewChecked(): void {
+    this.updateScroll();
+  }
+
+  getRoundNumber(weekIndex): number {
+    return parseInt(weekIndex, 0) - parseInt(this.eventinfo.startWeek, 0) + 1;
+  }
+
+  updateScroll(): void{
+    const tableScroll = this.tableScroll.nativeElement as HTMLElement;
+    tableScroll.scrollLeft = tableScroll.scrollWidth;
   }
 
   getPlayerPick(playerInfo, weekIndex): any {
@@ -36,15 +52,28 @@ export class LeaderboardComponent implements OnInit {
   getResultClass(playerInfo, weekIndex): any {
     const team = this.getPlayerPick(playerInfo, weekIndex);
     if (this.eventinfo.results[weekIndex] && playerInfo['week' + weekIndex]){
-      return this.getTeamResult(team, weekIndex) ? 'winningPick' : '';
+      if ( this.isWinningPick(team, weekIndex)){
+        return 'winningPick';
+      }
+    }
+    if (this.eventinfo.drawTeams[weekIndex] && playerInfo['week' + weekIndex]){
+      if ( this.isDrawingPick(team, weekIndex)){
+      return 'drawingLosePick';
+      }
     }
   }
 
-  getTeamResult(team, weekIndex): any {
+  isWinningPick(team, weekIndex): any {
     if (team){
       return (this.eventinfo.results[weekIndex].filter(result => result.toLowerCase() === team.toLowerCase()).length === 1);
     }
   }
+  isDrawingPick(team, weekIndex): any {
+    if (team){
+      return (this.eventinfo.drawTeams[weekIndex].filter(result => result.toLowerCase() === team.toLowerCase()).length === 1);
+    }
+  }
+
 
   getTeamLogo(playerInfo, weekIndex): any{
     return this.resourceService.getTeamLogoFromName(this.getPlayerPick(playerInfo, weekIndex));
@@ -53,6 +82,16 @@ export class LeaderboardComponent implements OnInit {
   getRemainingPlayers(): any{
     this.remainingPlayers = this.playerList.filter(
       player => !player['exit-week'] || player['exit-week'] === '-');
+  }
+
+  async checkPlayerSelections(): Promise<any> {
+    const duplicates = this.remainingPlayers.filter(
+      player => this.checkDuplicateSelections(player));
+    console.log(duplicates);
+  }
+
+  checkDuplicateSelections(player): any {
+    return (new Set(Object.values(player))).size !== Object.values(player).length;
   }
 
   sortPlayerByName(prop: any): any{

@@ -9,12 +9,12 @@
 </ngx-spinner>
 
 <div id="wrapper">
-<div id="table-content"> 
+<div id="table-content" #tableScroll> 
     <table class="table hoverTable">
         <thead>
             <tr>
                 <th class="player-heading" scope="col">Player</th>
-                <th class="round-heading" scope="col" *ngFor="let weekIndex of eventinfo.weeks;let i = index">Round {{i+1}}</th>
+                <th class="round-heading" scope="col" *ngFor="let weekIndex of eventinfo.weeks;let i = index">Round {{getRoundNumber(weekIndex)}}</th>
             </tr>
         </thead>
         <tbody>

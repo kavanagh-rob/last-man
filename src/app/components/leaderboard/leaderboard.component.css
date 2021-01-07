@@ -18,6 +18,11 @@ td {
     background-color: limegreen;
 }
 
+.drawingLosePick{
+    background-color: orange;
+}
+
+
 .losingPick {
     background-color: lightcoral;
 }

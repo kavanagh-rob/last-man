@@ -10,7 +10,6 @@ import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { GameweekComponent } from './components/gameweek/gameweek.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
-import { AdminComponent } from './components/admin/admin.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +19,6 @@ import { DataResolver } from './shared/resolvers/data-resolver';
 import { EventResolver } from './shared/resolvers/event-resolver';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { StatsComponent } from './components/stats/stats.component';
-import { FormComponent } from './components/form/form.component';
 import { LivescoresComponent } from './components/livescores/livescores.component';
 
 
@@ -74,11 +72,9 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     GameweekComponent,
     LeaderboardComponent,
-    AdminComponent,
     ContactComponent,
     InfoComponent,
     StatsComponent,
-    FormComponent,
     LivescoresComponent
   ],
   imports: [

@@ -52,7 +52,10 @@ export class StatsComponent implements OnInit {
   }
 
   getActiveColor(selection): string{
-    if (selection['status']){
+    if (selection['color']){
+      return selection['color'];
+    }
+    else if (selection['status']){
       return selection['status'] === 'win' ? 'limegreen' : 'crimson' ;
     }
   }
