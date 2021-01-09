@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "lastjimmystanding0cabce74": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

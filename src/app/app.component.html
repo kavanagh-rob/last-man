@@ -292,13 +292,15 @@
   }
 </style>
 
+r>
+
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
     <div class="col-2">
         <img class="responsive-image" src="/assets/captureflag.png">
     </div>
     <div class="col-8 text-center">
-        <span>Last Jimmy Standing</span>
+        <span>Last Jimmy Standing</span><span *ngIf="authState === 'signedin' && user">Hello {{user.username}}</span>
     </div>
 
     <div class="spacer"></div>

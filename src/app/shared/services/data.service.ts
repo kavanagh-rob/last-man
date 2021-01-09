@@ -22,11 +22,6 @@ export class DataService {
     const body = res.data;
     return res.data || {};
   }
-
-  extractLambdaData(res: any): any {
-    return res || {};
-  }
-
   handleErrorPromise(error: Response | any): void {
     console.error(error.message || error);
   }
@@ -62,14 +57,6 @@ export class DataService {
       }),
       );
   }
-
-  getLiveScoresData(): any {
-    return this.http.get(`${environment.liveUrl}/livescores`)
-      .toPromise()
-      .then(this.extractLambdaData)
-      .catch(this.handleErrorPromise);
-  }
-
 
  async getEventInfoAsync(): Promise<any> {
     return this.http.get(`${environment.liveUrl}/eventinfo`);

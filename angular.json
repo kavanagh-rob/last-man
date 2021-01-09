@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "last-man": {
+    "last-jimmy-standing": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,12 +13,28 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/last-man",
+            "outputPath": "dist/last-jimmy-standing",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": ["crypto-js", "@aws-sdk/eventstream-marshaller", "buffer", "js-cookie", 
+              "@aws-crypto", "zen-observable", "@aws-sdk/util-utf8-node", "@aws-crypto/sha256-js", "@aws-sdk/util-buffer-from",
+              "@aws-sdk/smithy-client", "@aws-sdk/middleware-serde", "@aws-sdk/middleware-user-agent",
+              "@aws-sdk/middleware-retry", "@aws-sdk/middleware-signing", "@aws-sdk/middleware-content-length",
+              "@aws-sdk/middleware-host-header", "@aws-sdk/config-resolver", "@aws-sdk/s3-request-presigner",
+              "@aws-sdk/util-format-url", "@aws-sdk/util-create-request", "@aws-sdk/property-provider",
+              "axios", "@aws-sdk/fetch-http-handler", "@aws-sdk/protocol-http", "@aws-sdk/querystring-builder",
+              "@aws-sdk/util-utf8-browser", "@aws-sdk/url-parser-browser", "@aws-crypto/sha256-browser",
+              "@aws-sdk/url-parser-node", "@aws-sdk/util-uri-escape", "@aws-sdk/middleware-sdk-s3",
+              "@aws-sdk/middleware-bucket-endpoint", "@aws-sdk/querystring-parser", "@aws-sdk/middleware-apply-body-checksum",
+              "@aws-sdk/middleware-ssec", "@aws-sdk/middleware-expect-continue", "fast-xml-parser",
+              "@aws-sdk/xml-builder", "@aws-sdk/md5-js", "@aws-sdk/hash-blob-browser",
+              "@aws-sdk/eventstream-serde-browser", "@aws-sdk/middleware-location-constraint", "uuid",
+              "@aws-sdk/credential-provider-cognito-identity", "@aws-sdk/eventstream-serde-config-resolver",
+              "ulid", "zen-push", "lodash", "@aws-amplify/core", "url", "@aws-crypto/crc32", "isomorphic-unfetch",
+              "crypto-js/lib-typedarrays", "crypto-js/hmac-sha256", "crypto"],
             "assets": [
               "src/favicon.png",
               "src/assets"
@@ -30,8 +46,7 @@
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.js"
-            ]
+              "./node_modules/bootstrap/dist/js/bootstrap.js"]
           },
           "configurations": {
             "production": {
@@ -44,7 +59,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -67,18 +81,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "last-man:build"
+            "browserTarget": "last-jimmy-standing:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "last-man:build:production"
+              "browserTarget": "last-jimmy-standing:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "last-man:build"
+            "browserTarget": "last-jimmy-standing:build"
           }
         },
         "test": {
@@ -115,15 +129,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "last-man:serve"
+            "devServerTarget": "last-jimmy-standing:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "last-man:serve:production"
+              "devServerTarget": "last-jimmy-standing:serve:production"
             }
           }
         }
       }
-    }},
-  "defaultProject": "last-man"
+    }
+  },
+  "defaultProject": "last-jimmy-standing"
 }
